@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_chess"
+    app:startDestination="@id/mainMenuFragment">
+
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="com.kailiu.chess.MainMenuFragment"
+        android:label="MainMenuFragment"
+        tools:layout="@layout/fragment_board">
+
+        <action
+            android:id="@+id/action_mainMenuFragment_to_chessFragment"
+            app:destination="@id/chessFragment" />
+
+        <action
+            android:id="@+id/action_mainMenuFragment_to_chineseFragment"
+            app:destination="@id/chineseFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/chessFragment"
+        android:name="com.kailiu.chess.fragment.chess.ChessFragment"
+        android:label="ChessFragment"
+        tools:layout="@layout/fragment_board">
+    </fragment>
+
+    <fragment
+        android:id="@+id/chineseFragment"
+        android:name="com.kailiu.chess.fragment.chinese.ChineseFragment"
+        android:label="ChineseFragment"
+        tools:layout="@layout/fragment_chinese">
+    </fragment>
+
+</navigation>
