@@ -73,14 +73,15 @@ class Queen(drawable: Drawable, override var isWhite: Boolean? = false): Piece(d
         val row = thisPosition / 8
 
         var spaces = iterateCardinal(list, thisPosition,-8, 0)
-
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }
+
         spaces = iterateCardinal(list, thisPosition,-1, -1)
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }
+
         spaces = iterateCardinal(list, thisPosition,1, -1)
         if (spaces.contains(Pair(king, true))) {
             return spaces
@@ -91,17 +92,18 @@ class Queen(drawable: Drawable, override var isWhite: Boolean? = false): Piece(d
             return spaces
         }
 
-        spaces = iterateDiagonal(list, position, -9, 0, -1) // NW
+        spaces = iterateDiagonal(list, thisPosition, -9, 0, -1) // NW
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }
 
-        spaces = iterateDiagonal(list, position, -7, row, -1) // NE
+        spaces = iterateDiagonal(list, thisPosition, -7, row, -1) // NE
+
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }
 
-        spaces = iterateDiagonal(list, position, 7, row)  // SW
+        spaces = iterateDiagonal(list, thisPosition, 7, row)  // SW
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }

@@ -2,9 +2,7 @@ package com.kailiu.chess.fragment.chess
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.get
 import kotlinx.android.synthetic.main.fragment_board.*
@@ -14,6 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.kailiu.chess.R
 import com.kailiu.chess.fragment.BoardFragment
+import com.kailiu.chess.fragment.BoardType
+import com.kailiu.chess.fragment.PromoteDialog
 import com.kailiu.chess.pieces.Piece
 import com.kailiu.chess.pieces.chess.*
 
@@ -105,70 +105,16 @@ class ChessFragment: BoardFragment() {
             )
         )
 
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_black,
-                    activity?.theme
+        for (i in 0 until 8) {
+            pieceArray.add(
+                Pawn(
+                    resources.getDrawable(
+                        R.drawable.ic_pawn_black,
+                        activity?.theme
+                    )
                 )
             )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_black,
-                    activity?.theme
-                )
-            )
-        )
+        }
 
         for (i in 0..31) {
             pieceArray.add(
@@ -181,70 +127,16 @@ class ChessFragment: BoardFragment() {
             )
         }
 
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_white,
-                    activity?.theme
-                ), true
+        for (i in 0 until 8) {
+            pieceArray.add(
+                Pawn(
+                    resources.getDrawable(
+                        R.drawable.ic_pawn_white,
+                        activity?.theme
+                    ), true
+                )
             )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_white,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_white,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_white,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_white,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_white,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_white,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Pawn(
-                resources.getDrawable(
-                    R.drawable.ic_pawn_white,
-                    activity?.theme
-                ), true
-            )
-        )
+        }
         
         pieceArray.add(
             Rook(
@@ -325,12 +217,15 @@ class ChessFragment: BoardFragment() {
             }
         })
 
-        initializeListeners(gridLayout, "Chess")
+        initializeListeners(gridLayout, BoardType.CHESS)
     }
 
-    override fun promotePawn(position: Int) {
+    override fun promote(position: Int) {
         if ((pieceArray[position].rank == 6) and ((position < 8) or (position > 55))) {
-            super.promotePawn(position)
+            val picker = PromoteDialog()
+            picker.putPosition(position, turn)
+            picker.setTargetFragment(this, 1)
+            picker.show(fragmentManager!!.beginTransaction(), "Date Picker")
         }
     }
 
@@ -339,7 +234,7 @@ class ChessFragment: BoardFragment() {
             1 -> if (resultCode == Activity.RESULT_OK) {
                 val bundle = data!!.extras
                 val position = bundle!!.getInt("position")
-                println("Rank: ${bundle.get("rank")} || $position")
+
                 when (bundle.get("rank")) {
                     2 -> {
                         val img = if (turn % 2 == 0) R.drawable.ic_queen_black else R.drawable.ic_queen_white

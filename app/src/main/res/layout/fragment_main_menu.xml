@@ -1,18 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_btnleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2037" />
+
+    <TextView
+        style="@style/TextRegular.Title"
+        android:id="@+id/mainMenuTitle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Chess Dojo"
+        android:gravity="center"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        style="@style/TextRegular.Player"
         android:id="@+id/chessBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chess"/>
+        android:text="Chess"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainMenuTitle"/>
 
-    <Button
-        android:id="@+id/chineseBtn"
+    <TextView
+        style="@style/TextRegular.Player"
+        android:id="@+id/xiangqiBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chinese Chess"/>
+        android:text="Xiangqi"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chessBtn"/>
 
-</LinearLayout>
+    <TextView
+        style="@style/TextRegular.Player"
+        android:id="@+id/shogiBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shogi"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/xiangqiBtn"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.kailiu.chess.pieces.chinese
+package com.kailiu.chess.pieces.xiangqi
 
 import android.graphics.drawable.Drawable
 import com.kailiu.chess.pieces.Piece
@@ -42,5 +42,49 @@ class Ju(drawable: Drawable, override var isWhite: Boolean? = false): Piece(draw
         }
 
         return spaces
+    }
+
+    override fun getSpacesToKing(list: ArrayList<Piece>, thisPosition: Int, king: Int): ArrayList<Pair<Int, Boolean>>  {
+        var spaces = iterate(list, thisPosition,-9, 0)
+        if (spaces.contains(Pair(king, true))) {
+            return spaces
+        }
+        spaces = iterate(list, thisPosition,-1, -1)
+        if (spaces.contains(Pair(king, true))) {
+            return spaces
+        }
+        spaces = iterate(list, thisPosition,1, -1)
+        if (spaces.contains(Pair(king, true))) {
+            return spaces
+        }
+        spaces = iterate(list, thisPosition,9, 7)
+        if (spaces.contains(Pair(king, true))) {
+            return spaces
+        }
+
+        return ArrayList()
+    }
+
+    override fun blockOrEat(list: ArrayList<Piece>, checkPosition: Int, thisPosition: Int, king: Int): Pair<Int, Boolean> {
+        if (!list[thisPosition].isSameColor(list[king])) {
+            return Pair(-1, false)
+        }
+
+        val checkSpaces = list[checkPosition].getSpacesToKing(list, checkPosition, king)
+        checkSpaces.add(Pair(checkPosition, true))
+
+        val thisSpaces = calcMovement(list, thisPosition)
+
+        if (binarySearch(checkSpaces, thisPosition) != -1) {
+            return Pair(thisPosition, true)
+        }
+
+        for (i in thisSpaces) {
+            if (binarySearch(checkSpaces, i.first) != -1) {
+                return Pair(thisPosition, false)
+            }
+        }
+
+        return Pair(-1, false)
     }
 }

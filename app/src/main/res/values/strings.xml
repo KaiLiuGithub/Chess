@@ -4,8 +4,25 @@
     <string name="player1">Player 1</string>
     <string name="player2">Player 2</string>
 
+    // Chess
     <string name="queen">Queen</string>
     <string name="rook">Rook</string>
     <string name="knight">Knight</string>
     <string name="bishop">Bishop</string>
+
+    // Shogi
+    <string name="osho">Osho</string>
+    <string name="hisha">Hisha</string>
+    <string name="hisha_promoted">Ryuo</string>
+    <string name="kakugyo">Kakugyo</string>
+    <string name="kakugyo_promoted">Ryuma</string>
+    <string name="kinsho">Kinsho</string>
+    <string name="ginsho">Ginsho</string>
+    <string name="ginsho_promoted">Narigin</string>
+    <string name="keima">Keima</string>
+    <string name="keima_promoted">Narikei</string>
+    <string name="kyosha">Kyosha</string>
+    <string name="kyosha_promoted">Narikyo</string>
+    <string name="fuhyo">Fuhyo</string>
+    <string name="fuhyo_promoted">Tokin</string>
 </resources>

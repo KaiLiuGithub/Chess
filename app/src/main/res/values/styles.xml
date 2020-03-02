@@ -30,4 +30,8 @@
     <style name="TextRegular.Winner" parent="TextRegular">
         <item name="android:textSize">40sp</item>
     </style>
+
+    <style name="TextRegular.Title" parent="TextRegular">
+        <item name="android:textSize">50sp</item>
+    </style>
 </resources>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/promoteTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Promote Piece?"
+        android:textSize="30sp"
+        android:layout_weight="2"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/unpromotedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/unpromotedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UNPROMTOED"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/unpromotedImg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_osho"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="1"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toEndOf="@id/unpromotedText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/promotedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/promotedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PROMOTED"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/promotedImg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_gyokusho"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="1"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toEndOf="@id/promotedText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/promoteYesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Yes"/>
+
+        <Button
+            android:id="@+id/promoteNoBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="No"/>
+    </LinearLayout>
+
+</LinearLayout>

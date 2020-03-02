@@ -1,13 +1,20 @@
 package com.kailiu.chess.pieces
 
+import android.content.Context
 import android.graphics.drawable.Drawable
+import com.kailiu.chess.R
 
 open class Piece(var drawable: Drawable) {
     var isEmpty = true
     open var isWhite: Boolean? = null
+    var hasMoved = false
     var rank = 0
     var position = -1
-
+    var isPromoted = false
+    open val unpromotedName = 0
+    open val promotedName = 0
+    open val unpromotedImg = 0
+    open val promotedImg = 0
 
     open fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {
         return arrayListOf()
@@ -67,4 +74,11 @@ open class Piece(var drawable: Drawable) {
 
         return -1
     }
+
+
+    open fun isInCheck(list: ArrayList<Piece>, position: Int): Pair<Int, Boolean> {
+        return Pair(-1, false)
+    }
+
+    open fun promote(context: Context) {}
 }

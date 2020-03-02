@@ -21,9 +21,9 @@ class Pawn(drawable: Drawable, override var isWhite: Boolean? = false): Piece(dr
                 if (list[position - 16].isEmpty) spaces.add(Pair(position - 16, false))
             }
 
-            if (up and left and !list[position - 9].isEmpty and !list[position - 9].isSameColor(this)) spaces.add(Pair(position - 9, true))
-            if (up and list[position - 8].isEmpty) spaces.add(Pair(position - 8, false))
-            if (up and right and !list[position - 7].isEmpty and !list[position - 7].isSameColor(this)) spaces.add(Pair(position - 7, true))
+            if (up and left) if (!list[position - 9].isEmpty and !list[position - 9].isSameColor(this)) spaces.add(Pair(position - 9, true))
+            if (up) if (list[position - 8].isEmpty) spaces.add(Pair(position - 8, false))
+            if (up and right) if (!list[position - 7].isEmpty and !list[position - 7].isSameColor(this)) spaces.add(Pair(position - 7, true))
         } else {
             val left = (position - 1) % 8 != 7
             val right = (position + 1) % 8 != 0
@@ -33,15 +33,12 @@ class Pawn(drawable: Drawable, override var isWhite: Boolean? = false): Piece(dr
                 if (list[position + 16].isEmpty) spaces.add(Pair(position + 16, false))
             }
 
-            if (down and left and !list[position + 7].isEmpty and !list[position + 7].isSameColor(this)) spaces.add(Pair(position + 7, true))
-            if (down and list[position + 8].isEmpty) spaces.add(Pair(position + 8, false))
-            if (down and right and !list[position + 9].isEmpty and !list[position + 9].isSameColor(this)) spaces.add(Pair(position + 9, true))
+            if (down and left) if (!list[position + 7].isEmpty and !list[position + 7].isSameColor(this)) spaces.add(Pair(position + 7, true))
+            if (down) if (list[position + 8].isEmpty) spaces.add(Pair(position + 8, false))
+            if (down and right) if (!list[position + 9].isEmpty and !list[position + 9].isSameColor(this)) spaces.add(Pair(position + 9, true))
         }
 
         return spaces
-    }
-    override fun getSpacesToKing(list: ArrayList<Piece>, thisPosition: Int, king: Int): ArrayList<Pair<Int, Boolean>> {
-        return super.getSpacesToKing(list, thisPosition, king)
     }
 
     override fun blockOrEat(list: ArrayList<Piece>, checkPosition: Int, thisPosition: Int, king: Int): Pair<Int, Boolean> {
@@ -54,7 +51,7 @@ class Pawn(drawable: Drawable, override var isWhite: Boolean? = false): Piece(dr
 
         val thisSpaces = calcMovement(list, thisPosition)
 
-        if (binarySearch(checkSpaces, checkPosition) != -1) {
+        if (binarySearch(checkSpaces, thisPosition) != -1) {
             return Pair(thisPosition, true)
         }
 

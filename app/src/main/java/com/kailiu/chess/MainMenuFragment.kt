@@ -27,8 +27,12 @@ class MainMenuFragment: Fragment() {
             navController.navigate(R.id.action_mainMenuFragment_to_chessFragment)
         }
 
-        chineseBtn.setOnClickListener {
-            navController.navigate( R.id.action_mainMenuFragment_to_chineseFragment)
+        xiangqiBtn.setOnClickListener {
+            navController.navigate( R.id.action_mainMenuFragment_to_xiangqiFragment)
+        }
+
+        shogiBtn.setOnClickListener {
+            navController.navigate( R.id.action_mainMenuFragment_to_shogiFragment)
         }
     }
 }

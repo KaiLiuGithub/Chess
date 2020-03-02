@@ -25,8 +25,6 @@ class Bishop(drawable: Drawable, override var isWhite: Boolean? = false): Piece(
     fun iterate(list: ArrayList<Piece>, position: Int, delta: Int, bound: Int, direction: Int = 1): ArrayList<Pair<Int, Boolean>> {
         val spaces = arrayListOf<Pair<Int, Boolean>>()
 
-        val row = position / 8
-
         for (i in 1..7) {
 
             if ((position + delta * i < 0) or (position + delta * i > 63) or ((position + delta * i) / 8 != position / 8 + i * direction)) break
@@ -46,22 +44,22 @@ class Bishop(drawable: Drawable, override var isWhite: Boolean? = false): Piece(
     override fun getSpacesToKing(list: ArrayList<Piece>, thisPosition: Int, king: Int): ArrayList<Pair<Int, Boolean>>  {
         val row = thisPosition / 8
 
-        var spaces = iterate(list, position, -9, 0, -1) // NW
+        var spaces = iterate(list, thisPosition, -9, 0, -1) // NW
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }
 
-        spaces = iterate(list, position, -7, row, -1) // NE
+        spaces = iterate(list, thisPosition, -7, row, -1) // NE
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }
 
-        spaces = iterate(list, position, 7, row)  // SW
+        spaces = iterate(list, thisPosition, 7, row)  // SW
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }
 
-        spaces = iterate(list, position, 9, 7)  // SE
+        spaces = iterate(list, thisPosition, 9, 7)  // SE
         if (spaces.contains(Pair(king, true))) {
             return spaces
         }
@@ -70,6 +68,7 @@ class Bishop(drawable: Drawable, override var isWhite: Boolean? = false): Piece(
     }
 
     override fun blockOrEat(list: ArrayList<Piece>, checkPosition: Int, thisPosition: Int, king: Int): Pair<Int, Boolean> {
+
         if (!list[thisPosition].isSameColor(list[king])) {
             return Pair(-1, false)
         }

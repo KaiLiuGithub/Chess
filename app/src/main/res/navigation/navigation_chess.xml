@@ -16,8 +16,11 @@
             app:destination="@id/chessFragment" />
 
         <action
-            android:id="@+id/action_mainMenuFragment_to_chineseFragment"
-            app:destination="@id/chineseFragment" />
+            android:id="@+id/action_mainMenuFragment_to_xiangqiFragment"
+            app:destination="@id/xiangqiFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_shogiFragment"
+            app:destination="@id/shogiFragment" />
 
     </fragment>
 
@@ -29,10 +32,17 @@
     </fragment>
 
     <fragment
-        android:id="@+id/chineseFragment"
-        android:name="com.kailiu.chess.fragment.chinese.ChineseFragment"
-        android:label="ChineseFragment"
-        tools:layout="@layout/fragment_chinese">
+        android:id="@+id/xiangqiFragment"
+        android:name="com.kailiu.chess.fragment.xiangqi.XiangqiFragment"
+        android:label="XiangqiFragment"
+        tools:layout="@layout/fragment_board">
+    </fragment>
+
+    <fragment
+        android:id="@+id/shogiFragment"
+        android:name="com.kailiu.chess.fragment.shogi.ShogiFragment"
+        android:label="ShogiFragment"
+        tools:layout="@layout/fragment_board">
     </fragment>
 
 </navigation>

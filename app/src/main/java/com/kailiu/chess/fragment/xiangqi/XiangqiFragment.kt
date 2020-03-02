@@ -1,36 +1,36 @@
-package com.kailiu.chess.fragment.chinese
+package com.kailiu.chess.fragment.xiangqi
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.GridLayout
-import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
 import com.kailiu.chess.R
 import com.kailiu.chess.fragment.BoardFragment
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
-import com.kailiu.chess.pieces.chess.*
-import com.kailiu.chess.pieces.chinese.*
+import com.kailiu.chess.pieces.xiangqi.*
 import kotlinx.android.synthetic.main.fragment_board.*
 
-class ChineseFragment: BoardFragment() {
+class XiangqiFragment: BoardFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         gridLayout.columnCount = 9
         gridLayout.rowCount = 10
-        gridLayout.background = resources.getDrawable(R.drawable.ic_chinese_board, activity?.theme)
+        gridLayout.background = resources.getDrawable(R.drawable.ic_xiangqi_board, activity?.theme)
 
         gridLayout.apply {
             ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, 0)
                 .dimensionRatio = "9:10"
+        }
+
+        resetBtn.setOnClickListener {
+            initializeBoard()
+            resetLayout.visibility = View.GONE
         }
 
         initializeBoard()
@@ -329,7 +329,7 @@ class ChineseFragment: BoardFragment() {
                 resources.getDrawable(
                     R.drawable.ic_pao_red,
                     activity?.theme
-                )
+                ), true
             )
         )
 
@@ -349,7 +349,7 @@ class ChineseFragment: BoardFragment() {
                 resources.getDrawable(
                     R.drawable.ic_pao_red,
                     activity?.theme
-                )
+                ), true
             )
         )
 
@@ -437,6 +437,6 @@ class ChineseFragment: BoardFragment() {
             )
         )
 
-        initializeListeners(gridLayout, "Chinese")
+        initializeListeners(gridLayout, BoardType.XIANGQI)
     }
 }
