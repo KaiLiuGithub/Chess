@@ -22,8 +22,8 @@ class Ginsho (drawable: Drawable, override var isWhite: Boolean? = false): Kinsh
 
         val direction = if (isWhite == true) 1 else -1
 
-        val left = (position - 1) % 9 != 8
-        val right = (position + 1) % 9 != 0
+        val left = (position - 1 * direction) % 9 != 8
+        val right = (position + 1 * direction) % 9 != 0
         val up = position - 9 * direction in 0..80
         val down = position + 9 * direction in 0..80
 

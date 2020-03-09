@@ -14,10 +14,15 @@ open class Kinsho(drawable: Drawable, override var isWhite: Boolean? = false): P
         
         val direction = if (isWhite == true) 1 else -1
 
-        val left = (position - 1) % 9 != 8
-        val right = (position + 1) % 9 != 0
+        val left = if (direction == 1) (position - 1) % 9 != 8 else (position + 1) % 9 != 0
+        val right = if (direction == 1) (position + 1) % 9 != 0 else (position - 1) % 9 != 8
         val up = position - 9 * direction in 0..80
         val down = position + 9 * direction in 0..80
+
+        println("${position - 1 * direction} || ${(position - 1 * direction) % 9} || $left")
+        println("${position + 1 * direction} || ${(position + 1 * direction) % 9} || $right")
+        println("${position - 9 * direction} || $up")
+        println("${position + 9 * direction} || $down")
 
         if (up and left) if(!list[position - 10 * direction].isSameColor(this) and !isInCheck(list, position - 10 * direction).second) spaces.add(Pair((position - 10 * direction), !list[position - 10 * direction].isEmpty))
         if (up) if (!list[position - 9 * direction].isSameColor(this) and !isInCheck(list, position - 9 * direction).second) spaces.add(Pair((position - 9 * direction), !list[position - 9 * direction].isEmpty))

@@ -137,6 +137,7 @@ class ShogiFragment: BoardFragment() {
                 val position = bundle!!.getInt("position")
 
                 pieceArray[position].drawable = resources.getDrawable(pieceArray[position].promotedImg, activity?.theme)
+                pieceArray[position].isPromoted = true
                 (gridLayout[position] as ImageView).setImageDrawable(pieceArray[position].drawable)
             }
         }

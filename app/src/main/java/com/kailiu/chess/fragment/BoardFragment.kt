@@ -1,7 +1,6 @@
 package com.kailiu.chess.fragment
 
 import android.graphics.Color
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +20,6 @@ import com.kailiu.chess.pieces.chess.King
 import com.kailiu.chess.pieces.shogi.Osho
 import com.kailiu.chess.pieces.xiangqi.Shuai
 import kotlinx.android.synthetic.main.fragment_board.*
-import kotlinx.android.synthetic.main.layout_piece.*
-
 
 var globalTurn = 0
 
@@ -41,33 +38,72 @@ open class BoardFragment: Fragment() {
 
     val listen =  MutableLiveData<Int>()
 
-    var getSpaces = { position: Int, location: LocationType ->
+    var getSpaces = { position: Int, location: LocationType, isBoard: Boolean ->
         val spaces = arrayListOf<Pair<Int, Boolean>>()
 
-        println("location: ${location}")
+        var captureList: ArrayList<Piece>? = null
+        if (location == LocationType.WHITE) captureList = whiteCapture
+        if (location == LocationType.BLACK) captureList = blackCapture
 
-        println("white: ${whiteCapture.size} || black: ${blackCapture.size}")
+        println("position: $position, loc: $location, isBoard: $isBoard")
 
         if (selected == null) {
-            if (location != LocationType.BOARD) {
-                selected = Pair(position, location)
-            }
+            if (isBoard) selected = Pair(position, location)
 
-            for (i in 0 until pieceArray.size) {
-                if (pieceArray[i].isEmpty) {
-                    spaces.add(Pair(i, false))
-                    if (location != LocationType.BOARD) {
-                        layout[i].setBackgroundColor(resources.getColor(R.color.empty_space, activity?.theme))
+            for (i in captureList!!) {
+                println("Capture? ${resources.getString(i.unpromotedName)}")
+            }
+            println("Captures: ${captureList.size}")
+            for (i in 0 until 9) {
+                val tempSpaces = arrayListOf<Pair<Int, Boolean>>()
+                for (j in 0 until 9) {
+                    if (pieceArray[j * 9 + i].isEmpty) {
+                        tempSpaces.add(Pair(j * 9 + i, false))
+                    } else if (captureList!![position].rank == 8  && pieceArray[j * 9 + i].rank == 8 && pieceArray[j * 9 + i].isSameColor(captureList[position])) {
+                        tempSpaces.clear()
+                        break
                     }
                 }
+
+                for (j in tempSpaces) {
+                    if (location != LocationType.BOARD) {
+                        layout[j.first].setBackgroundColor(
+                            resources.getColor(
+                                R.color.empty_space,
+                                activity?.theme
+                            )
+                        )
+                    }
+                }
+                spaces.addAll(tempSpaces)
+                println("Temp: ${tempSpaces.size} || Spaces: ${spaces.size}")
             }
-        } else {
+        } else if (!isBoard) {
+            println("")
+            selected = null
             for (i in 0 until pieceArray.size) {
                 if (location != LocationType.BOARD) {
                     layout[i].setBackgroundColor(Color.TRANSPARENT)
                 }
             }
-            selected = null
+        } else {
+            for (i in captureList!!) {
+                println("capture? ${resources.getString(i.unpromotedName)}")
+            }
+            println("captures: ${captureList.size}")
+            for (i in 0 until 9) {
+                val tempSpaces = arrayListOf<Pair<Int, Boolean>>()
+                for (j in 0 until 9) {
+                    if (pieceArray[j * 9 + i].isEmpty) {
+                        tempSpaces.add(Pair(j * 9 + i, false))
+                    } else if (captureList[selected!!.first].rank == 8  && pieceArray[j * 9 + i].rank == 8 && pieceArray[j * 9 + i].isSameColor(captureList[selected!!.first])) {
+                        tempSpaces.clear()
+                        break
+                    }
+                }
+                spaces.addAll(tempSpaces)
+                println("temp: ${tempSpaces.size} || spaces: ${spaces.size}")
+            }
         }
 
         spaces
@@ -84,6 +120,7 @@ open class BoardFragment: Fragment() {
     lateinit var layout: GridLayout
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        globalTurn = 0
         return inflater.inflate(R.layout.fragment_board, container, false)
     }
 
@@ -156,9 +193,9 @@ open class BoardFragment: Fragment() {
                     layout[j].setBackgroundColor(Color.TRANSPARENT)
                 }
 
-                println("induce: $induceCheck , $selectable, ${selected == null}, $inCheck, $valid")
+                println("selected null? ${selected == null}")
+
                 if (selectable && (selected == null) /*&& !induceCheck*/) {
-                    println("selectABLE")
                     selected = Pair(i, LocationType.BOARD)
 
                     spaces = pieceArray[i].calcMovement(pieceArray, i)
@@ -168,9 +205,9 @@ open class BoardFragment: Fragment() {
                         layout[j.first].setBackgroundColor(color)
                     }
                 } else if (selected != null) {
+                    println("selected: ${selected!!.first} || ${selected!!.second}")
                     if (selected!!.second == LocationType.BOARD) {
-                        spaces =
-                            pieceArray[selected!!.first].calcMovement(pieceArray, selected!!.first)
+                        spaces = pieceArray[selected!!.first].calcMovement(pieceArray, selected!!.first)
 
                         for (j in spaces) {
                             if (j.first == i) {
@@ -183,14 +220,16 @@ open class BoardFragment: Fragment() {
                             }
                         }
 
-                        if (type != BoardType.XIANGQI) {
+                        if (type != BoardType.XIANGQI && !pieceArray[i].isPromoted) {
                             promote(i)
                         }
                     } else {
-                        spaces = getSpaces(selected!!.first, LocationType.BOARD)
+                        spaces = getSpaces(selected!!.first, selected!!.second, true)
+
+                        println("SPACES: ${spaces.size}")
                         for (j in spaces) {
+                            println("j: ${j.first} || $i")
                             if (j.first == i) {
-                                println("selected: ${selected!!.first} || ${selected!!.second}")
                                 placePiece(selected!!.first, i, selected!!.second)
                                 turn += 1
                                 listen.postValue(turn)
@@ -302,10 +341,6 @@ open class BoardFragment: Fragment() {
         if (type == BoardType.SHOGI) {
             val captureList = if (locationType == LocationType.WHITE) whiteCapture else blackCapture
 
-            println("capture: ${captureList.size} || $p1 || ${locationType}")
-
-            println("White: ${whiteCapture.size} || Black: ${blackCapture.size}")
-
             pieceArray[p2] =
                 captureList[p1]
             captureList.removeAt(p1)
@@ -323,12 +358,14 @@ open class BoardFragment: Fragment() {
             pieceArray[p2] = temp
         } else if (pieceArray[p1].isWhite != pieceArray[p2].isWhite) {
             pieceArray[p2].isPromoted = false
+            pieceArray[p2].drawable = resources.getDrawable(pieceArray[p2].unpromotedImg, activity?.theme)
             if (pieceArray[p2].isWhite == true) {
                 pieceArray[p2].isWhite = false
                 blackCapture.add(pieceArray[p2])
                 blackViewAdapter.notifyDataSetChanged()
             } else {
                 pieceArray[p2].isWhite = true
+
                 whiteCapture.add(pieceArray[p2])
                 whiteViewAdapter.notifyDataSetChanged()
             }
@@ -363,7 +400,7 @@ open class BoardFragment: Fragment() {
         }
     }
 
-    class CapturedAdapter(private val myDataset: ArrayList<Piece>, val getSpaces: (Int, LocationType) -> List<Pair<Int, Boolean>>):
+    class CapturedAdapter(private val myDataset: ArrayList<Piece>, val getSpaces: (Int, LocationType, Boolean) -> List<Pair<Int, Boolean>>):
         RecyclerView.Adapter<CapturedAdapter.MyViewHolder>() {
 
         class MyViewHolder(val imageView: ImageView) : RecyclerView.ViewHolder(imageView)
@@ -383,7 +420,8 @@ open class BoardFragment: Fragment() {
                     println("isWhite? " + myDataset[position].isWhite)
                     getSpaces(
                         position,
-                        if (myDataset[position].isWhite == true) LocationType.WHITE else LocationType.BLACK
+                        if (myDataset[position].isWhite == true) LocationType.WHITE else LocationType.BLACK,
+                        false
                     )
                 }
             }
