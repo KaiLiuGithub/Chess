@@ -1,12 +1,17 @@
 package com.kailiu.chess.pieces.shogi
 
 import android.graphics.drawable.Drawable
+import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-open class Kinsho(drawable: Drawable, override var isWhite: Boolean? = false): Piece(drawable) {
+open class Kinsho(isWhite: Boolean? = false): Piece(isWhite) {
     init {
         isEmpty = false
         rank = 4
+        board = BoardType.SHOGI
+        unpromotedName = R.string.kinsho
+        unpromotedImg = R.drawable.ic_kinsho
     }
 
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {

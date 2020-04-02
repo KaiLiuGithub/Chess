@@ -12,21 +12,26 @@ import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kailiu.chess.BoardViewModel
+import com.kailiu.chess.MainActivity
 import com.kailiu.chess.R
+import com.kailiu.chess.database.Board
 import com.kailiu.chess.pieces.Piece
 import com.kailiu.chess.pieces.chess.King
 import com.kailiu.chess.pieces.shogi.Osho
 import com.kailiu.chess.pieces.xiangqi.Shuai
 import kotlinx.android.synthetic.main.fragment_board.*
+import kotlin.concurrent.thread
 
 var globalTurn = 0
 
 open class BoardFragment: Fragment() {
-    val pieceArray = ArrayList<Piece>()
-    val whiteCapture = ArrayList<Piece>()
-    val blackCapture = ArrayList<Piece>()
+    var pieceArray = ArrayList<Piece>()
+    var whiteCapture = ArrayList<Piece>()
+    var blackCapture = ArrayList<Piece>()
     val validPieces = ArrayList<Pair<Int, Boolean>>()
 
     var selected: Pair<Int, LocationType>? = null
@@ -45,15 +50,9 @@ open class BoardFragment: Fragment() {
         if (location == LocationType.WHITE) captureList = whiteCapture
         if (location == LocationType.BLACK) captureList = blackCapture
 
-        println("position: $position, loc: $location, isBoard: $isBoard")
-
         if (selected == null) {
             if (isBoard) selected = Pair(position, location)
 
-            for (i in captureList!!) {
-                println("Capture? ${resources.getString(i.unpromotedName)}")
-            }
-            println("Captures: ${captureList.size}")
             for (i in 0 until 9) {
                 val tempSpaces = arrayListOf<Pair<Int, Boolean>>()
                 for (j in 0 until 9) {
@@ -76,10 +75,8 @@ open class BoardFragment: Fragment() {
                     }
                 }
                 spaces.addAll(tempSpaces)
-                println("Temp: ${tempSpaces.size} || Spaces: ${spaces.size}")
             }
         } else if (!isBoard) {
-            println("")
             selected = null
             for (i in 0 until pieceArray.size) {
                 if (location != LocationType.BOARD) {
@@ -87,22 +84,17 @@ open class BoardFragment: Fragment() {
                 }
             }
         } else {
-            for (i in captureList!!) {
-                println("capture? ${resources.getString(i.unpromotedName)}")
-            }
-            println("captures: ${captureList.size}")
             for (i in 0 until 9) {
                 val tempSpaces = arrayListOf<Pair<Int, Boolean>>()
                 for (j in 0 until 9) {
                     if (pieceArray[j * 9 + i].isEmpty) {
                         tempSpaces.add(Pair(j * 9 + i, false))
-                    } else if (captureList[selected!!.first].rank == 8  && pieceArray[j * 9 + i].rank == 8 && pieceArray[j * 9 + i].isSameColor(captureList[selected!!.first])) {
+                    } else if (captureList!!.get(selected!!.first).rank == 8  && pieceArray[j * 9 + i].rank == 8 && pieceArray[j * 9 + i].isSameColor(captureList[selected!!.first])) {
                         tempSpaces.clear()
                         break
                     }
                 }
                 spaces.addAll(tempSpaces)
-                println("temp: ${tempSpaces.size} || spaces: ${spaces.size}")
             }
         }
 
@@ -119,13 +111,78 @@ open class BoardFragment: Fragment() {
 
     lateinit var layout: GridLayout
 
+    lateinit var boardViewModel: BoardViewModel
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         globalTurn = 0
+        boardViewModel = ViewModelProviders.of(activity!!).get(BoardViewModel::class.java)
+
         return inflater.inflate(R.layout.fragment_board, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupCaptureLists()
+
+        listen.value = turn
+
+        listen.observe(viewLifecycleOwner, Observer {
+            globalTurn++
+            if (turn % 2 == 0) {
+                player1.setTextColor(Color.BLACK)
+                player2.setTextColor(Color.GRAY)
+            } else {
+                player1.setTextColor(Color.GRAY)
+                player2.setTextColor(Color.BLACK)
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        boardViewModel.getGame(type).observe(this,
+            Observer { t ->
+                t?.let {
+                    clearGameIcons()
+                    pieceArray = t.board
+                    whiteCapture = t.white
+                    blackCapture = t.black
+
+                    for (p in whiteCapture) {
+                        p.setDrawable(context!!, true)
+                    }
+                    for (p in blackCapture) {
+                        p.setDrawable(context!!, true)
+                    }
+
+                    setupCaptureLists()
+
+                    whiteViewAdapter.notifyDataSetChanged()
+                    blackViewAdapter.notifyDataSetChanged()
+
+                    turn = t.turn
+                    initializeListeners(gridLayout, BoardType.valueOf(t.game))
+                }
+            })
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        thread {
+            boardViewModel.setGame(type, turn, pieceArray, whiteCapture, blackCapture)
+        }
+    }
+
+    protected fun clearGameIcons() {
+        gridLayout.removeAllViews()
+        whiteRecyclerView.removeAllViews()
+        blackRecyclerView.removeAllViews()
+    }
+
+    private fun setupCaptureLists() {
 
         whiteViewManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         whiteViewAdapter = CapturedAdapter(whiteCapture, getSpaces)
@@ -142,19 +199,6 @@ open class BoardFragment: Fragment() {
             layoutManager = blackViewManager
             adapter = blackViewAdapter
         }
-
-        listen.value = turn
-
-        listen.observe(this, Observer {
-            globalTurn++
-            if (turn % 2 == 0) {
-                player1.setTextColor(Color.BLACK)
-                player2.setTextColor(Color.GRAY)
-            } else {
-                player1.setTextColor(Color.GRAY)
-                player2.setTextColor(Color.BLACK)
-            }
-        })
     }
 
     fun initializeListeners(layout: GridLayout, type: BoardType) {
@@ -162,6 +206,7 @@ open class BoardFragment: Fragment() {
         this.type = type
         for (i in 0 until pieceArray.size) {
             val piece = pieceArray[i]
+            piece.setDrawable(context!!)
             val img = ImageView(context)
             img.setImageDrawable(piece.drawable)
             img.layoutParams = GridLayout.LayoutParams(
@@ -193,8 +238,6 @@ open class BoardFragment: Fragment() {
                     layout[j].setBackgroundColor(Color.TRANSPARENT)
                 }
 
-                println("selected null? ${selected == null}")
-
                 if (selectable && (selected == null) /*&& !induceCheck*/) {
                     selected = Pair(i, LocationType.BOARD)
 
@@ -205,7 +248,6 @@ open class BoardFragment: Fragment() {
                         layout[j.first].setBackgroundColor(color)
                     }
                 } else if (selected != null) {
-                    println("selected: ${selected!!.first} || ${selected!!.second}")
                     if (selected!!.second == LocationType.BOARD) {
                         spaces = pieceArray[selected!!.first].calcMovement(pieceArray, selected!!.first)
 
@@ -226,9 +268,7 @@ open class BoardFragment: Fragment() {
                     } else {
                         spaces = getSpaces(selected!!.first, selected!!.second, true)
 
-                        println("SPACES: ${spaces.size}")
                         for (j in spaces) {
-                            println("j: ${j.first} || $i")
                             if (j.first == i) {
                                 placePiece(selected!!.first, i, selected!!.second)
                                 turn += 1
@@ -268,16 +308,16 @@ open class BoardFragment: Fragment() {
         val removedPiece: Piece?
         if (removed > 0 && pieceArray[removed].rank != 1) {
             removedPiece = pieceArray[removed]
-            pieceArray[removed] = Piece(resources.getDrawable(R.drawable.ic_transparent, activity?.theme))
+            pieceArray[removed] = Piece()
         } else {
             removedPiece = null
         }
 
         for (j in 0 until pieceArray.size) {
             if (pieceArray[j].isWhite == white && pieceArray[j].rank == 1) {
-                val kingPiece = when (pieceArray[j]) {
-                    is King -> pieceArray[j] as King
-                    is Shuai -> pieceArray[j] as Shuai
+                val kingPiece = when (type) {
+                    BoardType.CHESS -> pieceArray[j] as King
+                    BoardType.XIANGQI -> pieceArray[j] as Shuai
                     else -> pieceArray[j] as Osho
                 }
                 val check = kingPiece.isInCheck(pieceArray, j)
@@ -290,21 +330,16 @@ open class BoardFragment: Fragment() {
                         block = pieceArray[check.first].calcMovement(pieceArray, check.first)
                             .contains(Pair(removed, true))
                     }
-                    println("blcok: $block")
                 }
-                println("block: $block")
 
                 if (check.second /*&& !block*/) {
                     gridLayout[j].setBackgroundColor(checkColor)
                     if (pieceArray[j].calcMovement(pieceArray, j).isEmpty()) {
-                        println("1: $j")
                         return Triple(j, true, true)
                     }
-                    println("2: $j")
                     return Triple(j, true, false)
                 } else {
                     removedPiece?.let { pieceArray[removed] = removedPiece }
-                    println("3: $j")
                     return Triple(j, false, false)
                 }
             }
@@ -358,25 +393,19 @@ open class BoardFragment: Fragment() {
             pieceArray[p2] = temp
         } else if (pieceArray[p1].isWhite != pieceArray[p2].isWhite) {
             pieceArray[p2].isPromoted = false
-            pieceArray[p2].drawable = resources.getDrawable(pieceArray[p2].unpromotedImg, activity?.theme)
+            pieceArray[p2].setDrawable(context!!)
             if (pieceArray[p2].isWhite == true) {
                 pieceArray[p2].isWhite = false
                 blackCapture.add(pieceArray[p2])
                 blackViewAdapter.notifyDataSetChanged()
             } else {
                 pieceArray[p2].isWhite = true
-
                 whiteCapture.add(pieceArray[p2])
                 whiteViewAdapter.notifyDataSetChanged()
             }
 
             pieceArray[p2] = pieceArray[p1]
-            pieceArray[p1] = Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
+            pieceArray[p1] = Piece()
         }
 
         pieceArray[p1].hasMoved = true
@@ -413,11 +442,11 @@ open class BoardFragment: Fragment() {
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+            println("drawable: ${myDataset[position].drawable}")
             holder.imageView.setImageDrawable(myDataset[position].drawable)
             holder.imageView.layoutParams = RecyclerView.LayoutParams(100, 100)
             holder.imageView.setOnClickListener {
                 if (((globalTurn % 2 == 0) and (myDataset[position].isWhite != true)) or ((globalTurn % 2 == 1) and (myDataset[position].isWhite != false))) {
-                    println("isWhite? " + myDataset[position].isWhite)
                     getSpaces(
                         position,
                         if (myDataset[position].isWhite == true) LocationType.WHITE else LocationType.BLACK,

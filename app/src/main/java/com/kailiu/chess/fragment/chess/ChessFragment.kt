@@ -36,178 +36,82 @@ class ChessFragment: BoardFragment() {
         pieceArray.clear()
         whiteCapture.clear()
         blackCapture.clear()
-        gridLayout.removeAllViews()
-        whiteRecyclerView.removeAllViews()
-        blackRecyclerView.removeAllViews()
+
+        clearGameIcons()
 
         pieceArray.add(
-            Rook(
-                resources.getDrawable(
-                    R.drawable.ic_rook_black,
-                    activity?.theme
-                )
-            )
+            Rook()
         )
         pieceArray.add(
-            Knight(
-                resources.getDrawable(
-                    R.drawable.ic_knight_black,
-                    activity?.theme
-                )
-            )
+            Knight()
         )
         pieceArray.add(
-            Bishop(
-                resources.getDrawable(
-                    R.drawable.ic_bishop_black,
-                    activity?.theme
-                )
-            )
+            Bishop()
         )
         pieceArray.add(
-            King(
-                resources.getDrawable(
-                    R.drawable.ic_king_black,
-                    activity?.theme
-                )
-            )
+            King()
         )
         pieceArray.add(
-            Queen(
-                resources.getDrawable(
-                    R.drawable.ic_queen_black,
-                    activity?.theme
-                )
-            )
+            Queen()
         )
         pieceArray.add(
-            Bishop(
-                resources.getDrawable(
-                    R.drawable.ic_bishop_black,
-                    activity?.theme
-                )
-            )
+            Bishop()
         )
         pieceArray.add(
-            Knight(
-                resources.getDrawable(
-                    R.drawable.ic_knight_black,
-                    activity?.theme
-                )
-            )
+            Knight()
         )
         pieceArray.add(
-            Rook(
-                resources.getDrawable(
-                    R.drawable.ic_rook_black,
-                    activity?.theme
-                )
-            )
+            Rook()
         )
 
         for (i in 0 until 8) {
             pieceArray.add(
-                Pawn(
-                    resources.getDrawable(
-                        R.drawable.ic_pawn_black,
-                        activity?.theme
-                    )
-                )
+                Pawn()
             )
         }
 
         for (i in 0..31) {
             pieceArray.add(
-                Piece(
-                    resources.getDrawable(
-                        R.drawable.ic_transparent,
-                        activity?.theme
-                    )
-                )
+                Piece()
             )
         }
 
         for (i in 0 until 8) {
             pieceArray.add(
-                Pawn(
-                    resources.getDrawable(
-                        R.drawable.ic_pawn_white,
-                        activity?.theme
-                    ), true
-                )
+                Pawn(true)
             )
         }
         
         pieceArray.add(
-            Rook(
-                resources.getDrawable(
-                    R.drawable.ic_rook_white,
-                    activity?.theme
-                ), true
-            )
+            Rook(true)
         )
         pieceArray.add(
-            Knight(
-                resources.getDrawable(
-                    R.drawable.ic_knight_white,
-                    activity?.theme
-                ), true
-            )
+            Knight(true)
         )
         pieceArray.add(
-            Bishop(
-                resources.getDrawable(
-                    R.drawable.ic_bishop_white,
-                    activity?.theme
-                ), true
-            )
+            Bishop(true)
         )
         pieceArray.add(
-            King(
-                resources.getDrawable(
-                    R.drawable.ic_king_white,
-                    activity?.theme
-                ), true
-            )
+            King(true)
         )
         pieceArray.add(
-            Queen(
-                resources.getDrawable(
-                    R.drawable.ic_queen_white,
-                    activity?.theme
-                ), true
-            )
+            Queen(true)
         )
         pieceArray.add(
-            Bishop(
-                resources.getDrawable(
-                    R.drawable.ic_bishop_white,
-                    activity?.theme
-                ), true
-            )
+            Bishop(true)
         )
         pieceArray.add(
-            Knight(
-                resources.getDrawable(
-                    R.drawable.ic_knight_white,
-                    activity?.theme
-                ), true
-            )
+            Knight(true)
         )
         pieceArray.add(
-            Rook(
-                resources.getDrawable(
-                    R.drawable.ic_rook_white,
-                    activity?.theme
-                ), true
-            )
+            Rook(true)
         )
 
         val listen =  MutableLiveData<Int>()
 
         listen.setValue(turn) //Initilize with a value
 
-        listen.observe(this, Observer {
+        listen.observe(viewLifecycleOwner, Observer {
             if (turn % 2 == 0) {
                 player1.setTextColor(Color.BLACK)
                 player2.setTextColor(Color.GRAY)
@@ -238,39 +142,19 @@ class ChessFragment: BoardFragment() {
                 when (bundle.get("rank")) {
                     2 -> {
                         val img = if (turn % 2 == 0) R.drawable.ic_queen_black else R.drawable.ic_queen_white
-                        pieceArray[position] = Queen(
-                            resources.getDrawable(
-                                img,
-                                activity?.theme
-                            ), turn % 2 != 0
-                        )
+                        pieceArray[position] = Queen( turn % 2 != 0)
                     }
                     3 -> {
                         val img = if (turn % 2 == 0) R.drawable.ic_rook_black else R.drawable.ic_rook_white
-                        pieceArray[position] = Rook(
-                            resources.getDrawable(
-                                img,
-                                activity?.theme
-                            ), turn % 2 != 0
-                        )
+                        pieceArray[position] = Rook(turn % 2 != 0)
                     }
                     4 -> {
                         val img = if (turn % 2 == 0) R.drawable.ic_knight_black else R.drawable.ic_knight_white
-                        pieceArray[position] = Knight(
-                            resources.getDrawable(
-                                img,
-                                activity?.theme
-                            ), turn % 2 != 0
-                        )
+                        pieceArray[position] = Knight(turn % 2 != 0)
                     }
                     5 -> {
                         val img = if (turn % 2 == 0) R.drawable.ic_bishop_black else R.drawable.ic_bishop_white
-                        pieceArray[position] = Bishop(
-                            resources.getDrawable(
-                                img,
-                                activity?.theme
-                            ), turn % 2 != 0
-                        )
+                        pieceArray[position] = Bishop(turn % 2 != 0)
                     }
                 }
                 (gridLayout[position] as ImageView).setImageDrawable(pieceArray[position].drawable)

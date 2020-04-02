@@ -1,12 +1,18 @@
 package com.kailiu.chess.pieces.xiangqi
 
 import android.graphics.drawable.Drawable
+import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class Xiang(drawable: Drawable, override var isWhite: Boolean? = false): Piece(drawable) {
+class Xiang(isWhite: Boolean? = false): Piece(isWhite) {
+
     init {
         isEmpty = false
         rank = 5
+        board = BoardType.XIANGQI
+        unpromotedImg = R.drawable.ic_xiang_black
+        promotedImg = R.drawable.ic_xiang_red
     }
 
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {

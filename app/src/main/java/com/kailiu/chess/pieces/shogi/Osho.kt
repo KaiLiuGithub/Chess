@@ -1,12 +1,19 @@
 package com.kailiu.chess.pieces.shogi
 
 import android.graphics.drawable.Drawable
+import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class Osho(drawable: Drawable, override var isWhite: Boolean? = false): Piece(drawable) {
+class Osho(isWhite: Boolean? = false): Piece(isWhite) {
     init {
         isEmpty = false
         rank = 1
+        board = BoardType.SHOGI
+        unpromotedName = R.string.osho
+        promotedName = R.string.gyokusho
+        unpromotedImg = R.drawable.ic_osho
+        promotedImg = R.drawable.ic_gyokusho
     }
     
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {

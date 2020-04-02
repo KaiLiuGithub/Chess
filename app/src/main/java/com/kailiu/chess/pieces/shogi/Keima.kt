@@ -2,17 +2,19 @@ package com.kailiu.chess.pieces.shogi
 
 import android.graphics.drawable.Drawable
 import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class Keima(drawable: Drawable, override var isWhite: Boolean? = false): Kinsho(drawable, isWhite) {
-    override val unpromotedName = R.string.keima
-    override val promotedName = R.string.keima_promoted
-    override val unpromotedImg = R.drawable.ic_keima
-    override val promotedImg = R.drawable.ic_keima_promoted
+class Keima(isWhite: Boolean? = false): Kinsho(isWhite) {
     
     init {
         isEmpty = false
         rank = 6
+        board = BoardType.SHOGI
+        unpromotedName = R.string.keima
+        promotedName = R.string.keima_promoted
+        unpromotedImg = R.drawable.ic_keima
+        promotedImg = R.drawable.ic_keima_promoted
     }
 
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {

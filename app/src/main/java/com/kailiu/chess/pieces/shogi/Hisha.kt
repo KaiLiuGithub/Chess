@@ -3,17 +3,19 @@ package com.kailiu.chess.pieces.shogi
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class Hisha(drawable: Drawable, override var isWhite: Boolean? = false): Piece(drawable) {
-    override val unpromotedName = R.string.hisha
-    override val promotedName = R.string.hisha_promoted
-    override val unpromotedImg = R.drawable.ic_hisha
-    override val promotedImg = R.drawable.ic_hisha_promoted
+class Hisha(isWhite: Boolean? = false): Piece(isWhite) {
 
     init {
         isEmpty = false
         rank = 2
+        board = BoardType.SHOGI
+        unpromotedName = R.string.hisha
+        promotedName = R.string.hisha_promoted
+        unpromotedImg = R.drawable.ic_hisha
+        promotedImg = R.drawable.ic_hisha_promoted
     }
 
 

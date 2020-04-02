@@ -12,6 +12,7 @@
 
     // Shogi
     <string name="osho">Osho</string>
+    <string name="gyokusho">Gyokusho</string>
     <string name="hisha">Hisha</string>
     <string name="hisha_promoted">Ryuo</string>
     <string name="kakugyo">Kakugyo</string>

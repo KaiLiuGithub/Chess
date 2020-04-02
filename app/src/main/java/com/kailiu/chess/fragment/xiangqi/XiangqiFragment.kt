@@ -24,7 +24,7 @@ class XiangqiFragment: BoardFragment() {
         gridLayout.background = resources.getDrawable(R.drawable.ic_xiangqi_board, activity?.theme)
 
         gridLayout.apply {
-            ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, 0)
+            ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
                 .dimensionRatio = "9:10"
         }
 
@@ -37,405 +37,78 @@ class XiangqiFragment: BoardFragment() {
     }
 
     fun initializeBoard() {
-        pieceArray.add(
-            Ju(
-                resources.getDrawable(
-                    R.drawable.ic_ju_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Ma(
-                resources.getDrawable(
-                    R.drawable.ic_ma_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Xiang(
-                resources.getDrawable(
-                    R.drawable.ic_xiang_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Shi(
-                resources.getDrawable(
-                    R.drawable.ic_shi_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Shuai(
-                resources.getDrawable(
-                    R.drawable.ic_shuai_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Shi(
-                resources.getDrawable(
-                    R.drawable.ic_shi_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Xiang(
-                resources.getDrawable(
-                    R.drawable.ic_xiang_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Ma(
-                resources.getDrawable(
-                    R.drawable.ic_ma_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Ju(
-                resources.getDrawable(
-                    R.drawable.ic_ju_black,
-                    activity?.theme
-                )
-            )
-        )
+
+        pieceArray.clear()
+        whiteCapture.clear()
+        blackCapture.clear()
+
+        clearGameIcons()
+        
+        pieceArray.add(Ju())
+        pieceArray.add(Ma())
+        pieceArray.add(Xiang())
+        pieceArray.add(Shi())
+        pieceArray.add(Shuai())
+        pieceArray.add(Shi())
+        pieceArray.add(Xiang())
+        pieceArray.add(Ma())
+        pieceArray.add(Ju())
 
         for (i in 0..9) {
-            pieceArray.add(
-                Piece(
-                    resources.getDrawable(
-                        R.drawable.ic_transparent,
-                        activity?.theme
-                    )
-                )
-            )
+            pieceArray.add(Piece())
         }
-
-        pieceArray.add(
-            Pao(
-                resources.getDrawable(
-                    R.drawable.ic_pao_black,
-                    activity?.theme
-                )
-            )
-        )
-
+        
+        pieceArray.add(Pao())
         for (i in 0..4) {
-            pieceArray.add(
-                Piece(
-                    resources.getDrawable(
-                        R.drawable.ic_transparent,
-                        activity?.theme
-                    )
-                )
-            )
+            pieceArray.add(Piece())
         }
+        pieceArray.add(Pao())
+        pieceArray.add(Piece())
 
-        pieceArray.add(
-            Pao(
-                resources.getDrawable(
-                    R.drawable.ic_pao_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_black,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_black,
-                    activity?.theme
-                )
-            )
-        )
+        pieceArray.add(Bing())
+        pieceArray.add(Piece())
+        pieceArray.add(Bing())
+        pieceArray.add(Piece())
+        pieceArray.add(Bing())
+        pieceArray.add(Piece())
+        pieceArray.add(Bing())
+        pieceArray.add(Piece())
+        pieceArray.add(Bing())
 
         for (i in 0..17) {
-            pieceArray.add(
-                Piece(
-                    resources.getDrawable(
-                        R.drawable.ic_transparent,
-                        activity?.theme
-                    )
-                )
-            )
+            pieceArray.add(Piece())
         }
 
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-        pieceArray.add(
-            Bing(
-                resources.getDrawable(
-                    R.drawable.ic_bing_red,
-                    activity?.theme
-                ), true
-            )
-        )
+        pieceArray.add(Bing(true))
+        pieceArray.add(Piece())
+        pieceArray.add(Bing(true))
+        pieceArray.add(Piece())
+        pieceArray.add(Bing(true))
+        pieceArray.add(Piece())
+        pieceArray.add(Bing(true))
+        pieceArray.add(Piece())
+        pieceArray.add(Bing(true))
 
-        pieceArray.add(
-            Piece(
-                resources.getDrawable(
-                    R.drawable.ic_transparent,
-                    activity?.theme
-                )
-            )
-        )
-
-        pieceArray.add(
-            Pao(
-                resources.getDrawable(
-                    R.drawable.ic_pao_red,
-                    activity?.theme
-                ), true
-            )
-        )
-
+        pieceArray.add(Piece())
+        pieceArray.add(Pao(true))
         for (i in 0..4) {
-            pieceArray.add(
-                Piece(
-                    resources.getDrawable(
-                        R.drawable.ic_transparent,
-                        activity?.theme
-                    )
-                )
-            )
+            pieceArray.add(Piece())
         }
-
-        pieceArray.add(
-            Pao(
-                resources.getDrawable(
-                    R.drawable.ic_pao_red,
-                    activity?.theme
-                ), true
-            )
-        )
+        pieceArray.add(Pao(true))
 
         for (i in 0..9) {
-            pieceArray.add(
-                Piece(
-                    resources.getDrawable(
-                        R.drawable.ic_transparent,
-                        activity?.theme
-                    )
-                )
-            )
+            pieceArray.add(Piece())
         }
-
-        pieceArray.add(
-            Ju(
-                resources.getDrawable(
-                    R.drawable.ic_ju_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Ma(
-                resources.getDrawable(
-                    R.drawable.ic_ma_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Xiang(
-                resources.getDrawable(
-                    R.drawable.ic_xiang_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Shi(
-                resources.getDrawable(
-                    R.drawable.ic_shi_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Shuai(
-                resources.getDrawable(
-                    R.drawable.ic_shuai_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Shi(
-                resources.getDrawable(
-                    R.drawable.ic_shi_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Xiang(
-                resources.getDrawable(
-                    R.drawable.ic_xiang_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Ma(
-                resources.getDrawable(
-                    R.drawable.ic_ma_red,
-                    activity?.theme
-                ), true
-            )
-        )
-        pieceArray.add(
-            Ju(
-                resources.getDrawable(
-                    R.drawable.ic_ju_red,
-                    activity?.theme
-                ), true
-            )
-        )
+        
+        pieceArray.add(Ju(true))
+        pieceArray.add(Ma(true))
+        pieceArray.add(Xiang(true))
+        pieceArray.add(Shi(true))
+        pieceArray.add(Shuai(true))
+        pieceArray.add(Shi(true))
+        pieceArray.add(Xiang(true))
+        pieceArray.add(Ma(true))
+        pieceArray.add(Ju(true))
 
         initializeListeners(gridLayout, BoardType.XIANGQI)
     }

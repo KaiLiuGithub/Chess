@@ -1,13 +1,18 @@
 package com.kailiu.chess.pieces.chess
 
 import android.graphics.drawable.Drawable
+import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class Rook(drawable: Drawable, override var isWhite: Boolean? = false): Piece(drawable) {
+class Rook(isWhite: Boolean? = false): Piece(isWhite) {
 
     init {
         isEmpty = false
         rank = 3
+        board = BoardType.CHESS
+        unpromotedImg = R.drawable.ic_rook_black
+        promotedImg = R.drawable.ic_rook_white
     }
 
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {

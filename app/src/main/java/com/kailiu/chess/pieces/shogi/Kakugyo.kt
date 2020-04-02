@@ -2,17 +2,19 @@ package com.kailiu.chess.pieces.shogi
 
 import android.graphics.drawable.Drawable
 import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class Kakugyo(drawable: Drawable, override var isWhite: Boolean? = false): Piece(drawable) {
-    override val unpromotedName = R.string.kakugyo
-    override val promotedName = R.string.kakugyo_promoted
-    override val unpromotedImg = R.drawable.ic_kakugyo
-    override val promotedImg = R.drawable.ic_kakugyo_promoted
+class Kakugyo(isWhite: Boolean? = false): Piece(isWhite) {
 
     init {
         isEmpty = false
         rank = 3
+        board = BoardType.SHOGI
+        unpromotedName = R.string.kakugyo
+        promotedName = R.string.kakugyo_promoted
+        unpromotedImg = R.drawable.ic_kakugyo
+        promotedImg = R.drawable.ic_kakugyo_promoted
     }
 
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {

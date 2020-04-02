@@ -1,13 +1,18 @@
 package com.kailiu.chess.pieces.chess
 
 import android.graphics.drawable.Drawable
+import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class King(drawable: Drawable, override var isWhite: Boolean? = false): Piece(drawable) {
+class King(isWhite: Boolean? = false): Piece(isWhite) {
 
     init {
         isEmpty = false
         rank = 1
+        board = BoardType.CHESS
+        unpromotedImg = R.drawable.ic_king_black
+        promotedImg = R.drawable.ic_king_white
     }
 
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {
@@ -121,12 +126,12 @@ class King(drawable: Drawable, override var isWhite: Boolean? = false): Piece(dr
             check = position + 8 - 1 * 2
             result = true
         }
-        if (right and downDown) if (!list[position + 8 * 2 - 1].isSameColor(this) && list[position + 8 * 2 - 1].rank == 4) {
-            check = position + 8 * 2 - 1
+        if (right and downDown) if (!list[position + 8 * 2 + 1].isSameColor(this) && list[position + 8 * 2 + 1].rank == 4) {
+            check = position + 8 * 2 + 1
             result = true
         }
-        if (left and downDown) if (!list[position + 8 * 2 + 1].isSameColor(this) && list[position + 8 * 2 + 1].rank == 4) {
-            check = position + 8 * 2 + 1
+        if (left and downDown) if (!list[position + 8 * 2 - 1].isSameColor(this) && list[position + 8 * 2 - 1].rank == 4) {
+            check = position + 8 * 2 - 1
             result = true
         }
         println("3! $position: $result")

@@ -2,17 +2,19 @@ package com.kailiu.chess.pieces.shogi
 
 import android.graphics.drawable.Drawable
 import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class Fuhyo(drawable: Drawable, override var isWhite: Boolean? = false): Kinsho(drawable, isWhite) {
-    override val unpromotedName = R.string.fuhyo
-    override val promotedName = R.string.fuhyo_promoted
-    override val unpromotedImg = R.drawable.ic_fuhyo
-    override val promotedImg = R.drawable.ic_fuhyo_promoted
+class Fuhyo(isWhite: Boolean? = false): Kinsho(isWhite) {
     
     init {
         isEmpty = false
         rank = 8
+        board = BoardType.SHOGI
+        unpromotedName = R.string.fuhyo
+        promotedName = R.string.fuhyo_promoted
+        unpromotedImg = R.drawable.ic_fuhyo
+        promotedImg = R.drawable.ic_fuhyo_promoted
     }
 
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {

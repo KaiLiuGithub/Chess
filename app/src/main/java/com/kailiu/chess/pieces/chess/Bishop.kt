@@ -1,12 +1,18 @@
 package com.kailiu.chess.pieces.chess
 
 import android.graphics.drawable.Drawable
+import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 import com.kailiu.chess.pieces.Piece
 
-class Bishop(drawable: Drawable, override var isWhite: Boolean? = false): Piece(drawable) {
+class Bishop(isWhite: Boolean? = false): Piece(isWhite) {
+    
     init {
         isEmpty = false
         rank = 5
+        board = BoardType.CHESS
+        unpromotedImg = R.drawable.ic_bishop_black
+        promotedImg = R.drawable.ic_bishop_white
     }
 
     override fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {

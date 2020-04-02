@@ -2,19 +2,32 @@ package com.kailiu.chess.pieces
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import com.google.gson.annotations.Expose
 import com.kailiu.chess.R
+import com.kailiu.chess.fragment.BoardType
 
-open class Piece(var drawable: Drawable) {
+open class Piece(@Expose var isWhite: Boolean? = null) {
+    var drawable: Drawable? = null
+    @Expose
     var isEmpty = true
-    open var isWhite: Boolean? = null
+    @Expose
     var hasMoved = false
+    @Expose
     var rank = 0
+    @Expose
     var position = -1
+    @Expose
     var isPromoted = false
-    open val unpromotedName = 0
-    open val promotedName = 0
-    open val unpromotedImg = 0
-    open val promotedImg = 0
+    @Expose
+    var board = BoardType.CHESS
+    @Expose
+    var unpromotedName = 0
+    @Expose
+    var promotedName = 0
+    @Expose
+    var unpromotedImg = R.drawable.ic_transparent
+    @Expose
+    var promotedImg = R.drawable.ic_transparent
 
     open fun calcMovement(list: ArrayList<Piece>, position: Int): ArrayList<Pair<Int, Boolean>> {
         return arrayListOf()
@@ -81,4 +94,18 @@ open class Piece(var drawable: Drawable) {
     }
 
     open fun promote(context: Context) {}
+
+    fun setDrawable(context: Context, isCaptured: Boolean = false) {
+        var b = if (board == BoardType.SHOGI) isPromoted else isWhite
+        
+        if (isCaptured) { b = b != true }
+
+        drawable = context.resources.getDrawable(
+            if (b == true) {
+                promotedImg
+            } else {
+                unpromotedImg
+            }, context.theme
+        )
+    }
 }
